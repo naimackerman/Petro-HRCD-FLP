@@ -1,0 +1,99 @@
+[
+  {
+    "scenario": "Conservative",
+    "exact": {
+      "cost": 1399600.0,
+      "time": 1.2472357749938965,
+      "facilities": [
+        4,
+        6,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "num_facilities": 9
+    },
+    "heuristic": {
+      "cost": "1433800",
+      "time": 0.24969911575317383,
+      "facilities": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        8,
+        9,
+        10,
+        12,
+        13
+      ],
+      "num_facilities": 10,
+      "gap_percent": 2.4435553015147184
+    }
+  },
+  {
+    "scenario": "Balanced",
+    "exact": {
+      "cost": 879600.0,
+      "time": 0.20969319343566895,
+      "facilities": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "num_facilities": 7
+    },
+    "heuristic": {
+      "cost": "889600",
+      "time": 0.28275394439697266,
+      "facilities": [
+        0,
+        1,
+        9,
+        10,
+        11,
+        12,
+        14
+      ],
+      "num_facilities": 7,
+      "gap_percent": 1.1368804001819008
+    }
+  },
+  {
+    "scenario": "Future",
+    "exact": {
+      "cost": 512400.0,
+      "time": 3.178541898727417,
+      "facilities": [
+        8,
+        9,
+        10,
+        12,
+        14
+      ],
+      "num_facilities": 5
+    },
+    "heuristic": {
+      "cost": "517400",
+      "time": 0.12210893630981445,
+      "facilities": [
+        0,
+        8,
+        10,
+        12,
+        13
+      ],
+      "num_facilities": 5,
+      "gap_percent": 0.9758001561280251
+    }
+  }
+]
