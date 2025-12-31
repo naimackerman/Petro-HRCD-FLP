@@ -1,9 +1,92 @@
 [
   {
     "scenario": "Conservative",
+    "exact": {
+      "cost": 692450.0,
+      "time": 1.3204972743988037,
+      "facilities": [
+        9,
+        10,
+        12,
+        14
+      ],
+      "levels": {
+        "9": "High",
+        "10": "High",
+        "12": "High",
+        "14": "High"
+      },
+      "num_facilities": 4,
+      "resources": {
+        "0": {
+          "robot": 0,
+          "human": 0
+        },
+        "1": {
+          "robot": 0,
+          "human": 0
+        },
+        "2": {
+          "robot": 0,
+          "human": 0
+        },
+        "3": {
+          "robot": 0,
+          "human": 0
+        },
+        "4": {
+          "robot": 0,
+          "human": 0
+        },
+        "5": {
+          "robot": 0,
+          "human": 0
+        },
+        "6": {
+          "robot": 0,
+          "human": 0
+        },
+        "7": {
+          "robot": 0,
+          "human": 0
+        },
+        "8": {
+          "robot": 0,
+          "human": 0
+        },
+        "9": {
+          "robot": 107,
+          "human": 40
+        },
+        "10": {
+          "robot": 28,
+          "human": 31
+        },
+        "11": {
+          "robot": 0,
+          "human": 0
+        },
+        "12": {
+          "robot": 37,
+          "human": 38
+        },
+        "13": {
+          "robot": 0,
+          "human": 0
+        },
+        "14": {
+          "robot": 35,
+          "human": 40
+        }
+      },
+      "total_resources": {
+        "robot": 207,
+        "human": 149
+      }
+    },
     "heuristic": {
       "cost": 734700.0,
-      "time": 7.002241134643555,
+      "time": 6.695088148117065,
       "facilities": [
         3,
         6,
@@ -27,7 +110,7 @@
         "14": "Low"
       },
       "num_facilities": 9,
-      "gap_percent": null,
+      "gap_percent": 6.101523575709438,
       "resources": {
         "0": {
           "robot": 0,
@@ -98,9 +181,92 @@
   },
   {
     "scenario": "Balanced",
+    "exact": {
+      "cost": 610175.0,
+      "time": 0.24694085121154785,
+      "facilities": [
+        9,
+        10,
+        12,
+        14
+      ],
+      "levels": {
+        "9": "Low",
+        "10": "High",
+        "12": "High",
+        "14": "High"
+      },
+      "num_facilities": 4,
+      "resources": {
+        "0": {
+          "robot": 0,
+          "human": 0
+        },
+        "1": {
+          "robot": 0,
+          "human": 0
+        },
+        "2": {
+          "robot": 0,
+          "human": 0
+        },
+        "3": {
+          "robot": 0,
+          "human": 0
+        },
+        "4": {
+          "robot": 0,
+          "human": 0
+        },
+        "5": {
+          "robot": 0,
+          "human": 0
+        },
+        "6": {
+          "robot": 0,
+          "human": 0
+        },
+        "7": {
+          "robot": 0,
+          "human": 0
+        },
+        "8": {
+          "robot": 0,
+          "human": 0
+        },
+        "9": {
+          "robot": 12,
+          "human": 7
+        },
+        "10": {
+          "robot": 74,
+          "human": 40
+        },
+        "11": {
+          "robot": 0,
+          "human": 0
+        },
+        "12": {
+          "robot": 92,
+          "human": 40
+        },
+        "13": {
+          "robot": 0,
+          "human": 0
+        },
+        "14": {
+          "robot": 51,
+          "human": 40
+        }
+      },
+      "total_resources": {
+        "robot": 229,
+        "human": 127
+      }
+    },
     "heuristic": {
       "cost": 652185.0,
-      "time": 6.158377170562744,
+      "time": 6.029866933822632,
       "facilities": [
         1,
         3,
@@ -124,7 +290,7 @@
         "14": "Low"
       },
       "num_facilities": 9,
-      "gap_percent": null,
+      "gap_percent": 6.884910066784119,
       "resources": {
         "0": {
           "robot": 0,
@@ -195,9 +361,90 @@
   },
   {
     "scenario": "Future",
+    "exact": {
+      "cost": 508000.0,
+      "time": 0.2557501792907715,
+      "facilities": [
+        8,
+        9,
+        10
+      ],
+      "levels": {
+        "8": "Medium",
+        "9": "High",
+        "10": "High"
+      },
+      "num_facilities": 3,
+      "resources": {
+        "0": {
+          "robot": 0,
+          "human": 0
+        },
+        "1": {
+          "robot": 0,
+          "human": 0
+        },
+        "2": {
+          "robot": 0,
+          "human": 0
+        },
+        "3": {
+          "robot": 0,
+          "human": 0
+        },
+        "4": {
+          "robot": 0,
+          "human": 0
+        },
+        "5": {
+          "robot": 0,
+          "human": 0
+        },
+        "6": {
+          "robot": 0,
+          "human": 0
+        },
+        "7": {
+          "robot": 0,
+          "human": 0
+        },
+        "8": {
+          "robot": 40,
+          "human": 20
+        },
+        "9": {
+          "robot": 125,
+          "human": 39
+        },
+        "10": {
+          "robot": 91,
+          "human": 39
+        },
+        "11": {
+          "robot": 0,
+          "human": 0
+        },
+        "12": {
+          "robot": 0,
+          "human": 0
+        },
+        "13": {
+          "robot": 0,
+          "human": 0
+        },
+        "14": {
+          "robot": 0,
+          "human": 0
+        }
+      },
+      "total_resources": {
+        "robot": 256,
+        "human": 98
+      }
+    },
     "heuristic": {
       "cost": 537820.0,
-      "time": 6.489912748336792,
+      "time": 6.508527994155884,
       "facilities": [
         6,
         8,
@@ -219,7 +466,7 @@
         "14": "High"
       },
       "num_facilities": 8,
-      "gap_percent": null,
+      "gap_percent": 5.8700787401574805,
       "resources": {
         "0": {
           "robot": 0,
