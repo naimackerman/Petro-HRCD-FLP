@@ -430,11 +430,30 @@ Three command center levels were modeled:
 \end{itemize}
 
 \subsection{Scenarios}
-To evaluate the impact of technological maturity, we defined three scenarios varying the Global Supervision Ratio ($\alpha$) and Robot Efficiency/Cost:
+To evaluate the impact of technological maturity, we defined three scenarios varying three key parameters:
+\begin{enumerate}
+    \item \textbf{Global Supervision Ratio ($\alpha$):} The minimum number of humans required per robot across all facilities.
+    \item \textbf{Robot Cost Multiplier:} A scaling factor applied to the base robot deployment cost $C_{i,\text{Robot}}$, reflecting decreasing hardware costs as technology matures.
+    \item \textbf{Site-Specific Mix Scaler:} A scaling factor applied to the site-specific mix ratio $\alpha_j$, allowing greater automation at each demand site as autonomous capabilities improve.
+\end{enumerate}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Scenario} & \textbf{$\alpha$ (H:R)} & \textbf{Robot Cost Mult.} & \textbf{$\alpha_j$ Scaler} \\ \hline
+Conservative & 1:3 & 1.0$\times$ & 1.0$\times$ \\ \hline
+Balanced & 1:5 & 0.9$\times$ & 0.75$\times$ \\ \hline
+Future & 1:10 & 0.8$\times$ & 0.50$\times$ \\ \hline
+\end{tabular}
+\caption{Technology Scenario Parameters}
+\label{tab:scenarios}
+\end{table}
+
 \begin{itemize}
-    \item \textbf{Conservative:} High human reliance ($\alpha \approx 1:3$), standard robot costs.
-    \item \textbf{Balanced:} Current technology mix ($\alpha \approx 1:5$), reduced robot costs.
-    \item \textbf{Future:} Autonomous-centric ($\alpha \approx 1:10$), low robot costs and high reliance on automation.
+    \item \textbf{Conservative:} Represents current operational constraints with high human reliance. Robots require substantial human oversight (1 human per 3 robots), and robot deployment costs remain at baseline levels.
+    \item \textbf{Balanced:} Reflects near-term technological improvements. Reduced supervision requirements (1:5 ratio), 10\% lower robot costs, and 25\% reduction in site-specific human requirements enable moderate automation.
+    \item \textbf{Future:} Projects a mature autonomous security ecosystem. Minimal supervision (1:10 ratio), 20\% lower robot costs, and 50\% reduction in site-specific human requirements allow for highly automated operations.
 \end{itemize}
 
 \section{Results}
