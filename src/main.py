@@ -1,16 +1,17 @@
 """
-Main Entry Point for Saudi Aramco Security Optimization.
+Main Entry Point for Human-Robot Co-Dispatch Facility Location Problem (HRCD-FLP) Optimization.
 
 Runs experiments comparing Exact (Gurobi) and Heuristic solvers
 across technology scenarios: Conservative, Balanced, Future.
 
 Usage:
     uv run python -m src.main                    # Run all scenarios (synthetic data)
-    uv run python -m src.main --real-data        # Use real Dhahran locations
+    uv run python -m src.main --real-data        # Use real facility locations
     uv run python -m src.main -s Balanced        # Run single scenario
     uv run python -m src.main --heuristic-only   # Skip Gurobi solver
     uv run python -m src.main --verbose          # Show detailed progress
     uv run python -m src.main --save-solutions   # Save solutions for later visualization
+    uv run python -m src.main --candidates 20 --sites 100  Custom problem size
 
 To visualize saved solutions without re-running the solver:
     uv run python -m src.solution_io --list      # List saved solutions
@@ -39,12 +40,12 @@ VALID_SCENARIOS = ['Conservative', 'Balanced', 'Future']
 def parse_args():
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(
-        description="Saudi Aramco Security Command Center Location Optimization",
+        description="Human-Robot Co-Dispatch Facility Location Problem (HRCD-FLP) Optimization",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
   uv run python -m src.main                         Run all scenarios (synthetic)
-  uv run python -m src.main --real-data             Use real Dhahran locations
+  uv run python -m src.main --real-data             Use real facility locations
   uv run python -m src.main -s Balanced             Run only Balanced scenario
   uv run python -m src.main -s Conservative Future  Run two scenarios
   uv run python -m src.main --heuristic-only        Skip Gurobi (no license needed)
@@ -129,7 +130,7 @@ To visualize saved solutions:
     parser.add_argument(
         '--real-data',
         action='store_true',
-        help="Use real Saudi Aramco Dhahran location data instead of synthetic"
+        help="Use real facility location data instead of synthetic"
     )
     
     parser.add_argument(
@@ -165,7 +166,7 @@ def run_experiment(args):
     results = []
     
     print("=" * 80)
-    print("Saudi Aramco Security Command Center Optimization")
+    print("Human-Robot Co-Dispatch Facility Location Problem (HRCD-FLP) Optimization")
     print("=" * 80)
     print(f"Configuration: {args.candidates} candidates, {args.sites} demand sites, seed={args.seed}")
     print(f"Facility Levels: {gen.levels}")

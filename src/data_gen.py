@@ -1,9 +1,9 @@
 """
-Data Generator Module for Saudi Aramco Security Optimization.
+Data Generator Module for HRCD FLP Optimization.
 
 Supports two modes:
-1. Synthetic data: Randomly generated locations around Dhahran
-2. Real data: Actual Saudi Aramco facility locations from JSON file
+1. Synthetic data: Randomly generated locations
+2. Real data: Actual facility locations from JSON file
 """
 import json
 import numpy as np
@@ -21,12 +21,12 @@ class DataGenerator:
             num_candidates: Number of candidate facility locations (synthetic mode)
             num_demand_sites: Number of demand sites (synthetic mode)
             seed: Random seed for reproducibility
-            use_real_data: If True, load real Dhahran location data from JSON
+            use_real_data: If True, load real facility location data from JSON
         """
         np.random.seed(seed)
         self.use_real_data = use_real_data
         
-        # Dhahran center coordinates (approximately 26.30N, 50.13E for Core Area)
+        # Case study: Dhahran center coordinates (approximately 26.30N, 50.13E for Core Area)
         self.center_lat = 26.30
         self.center_lon = 50.13
         
@@ -51,12 +51,12 @@ class DataGenerator:
         
     def _load_real_data(self):
         """Load real location data from JSON file."""
-        data_file = Path(__file__).parent.parent / "data" / "raw" / "dhahran_locations.json"
+        data_file = Path(__file__).parent.parent / "data" / "raw" / "case_study_facility_locations.json"
         
         if not data_file.exists():
             raise FileNotFoundError(
                 f"Real data file not found: {data_file}\n"
-                "Please ensure data/raw/dhahran_locations.json exists."
+                "Please ensure data/raw/case_study_facility_locations.json exists."
             )
         
         with open(data_file, 'r') as f:
@@ -68,7 +68,7 @@ class DataGenerator:
         """Generate or load candidate and demand site locations."""
         
         if self.use_real_data:
-            # Load real Dhahran locations
+            # Load real case study locations
             data = self._load_real_data()
             
             self.I_coords = [(loc['lat'], loc['lon']) for loc in data['candidate_locations']]
@@ -82,7 +82,7 @@ class DataGenerator:
             self.num_I = len(self.I_coords)
             self.num_J = len(self.J_coords)
             
-            print(f"Loaded real data: {self.num_I} candidates, {self.num_J} demand sites")
+            print(f"Loaded real case study data: {self.num_I} candidates, {self.num_J} demand sites")
         else:
             # Generate synthetic locations with corridor pattern
             self._generate_corridor_pattern()

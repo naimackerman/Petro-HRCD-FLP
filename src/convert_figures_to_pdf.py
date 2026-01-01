@@ -6,8 +6,8 @@ This script converts the large PNG figures (~9MB each) to optimized PDFs
 that are much smaller and better suited for LaTeX documents.
 
 Usage:
-    cd aramco_security_opt
-    python src/convert_figures_to_pdf.py
+    cd Petro-HRCD-FLP
+    uv run python src/convert_figures_to_pdf.py
 """
 
 from pathlib import Path

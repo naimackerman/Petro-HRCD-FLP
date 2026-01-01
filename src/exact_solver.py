@@ -1,24 +1,24 @@
 """
 Exact Solver Module using Gurobi Optimizer.
 
-Implements the Mixed Integer Programming (MIP) model for the 
-Saudi Aramco Security Command Center Location Problem.
+Implements the Mixed Integer Linear Programming (MILP) model for the 
+Human-Robot Co-Dispatch Facility Location Problem (HRCD-FLP).
 
 Sets:
-- I: Candidate command center locations
+- I: Candidate facility locations
 - J: Demand sites
-- L: Command center levels (High, Medium, Low)
+- L: Facility levels (High, Medium, Low)
 - K: Resource types (Robot, Human)
 
 Decision Variables:
-- x_il: Binary, 1 if command center at location i with level l is built
-- y_ij: Binary, 1 if demand site j is assigned to command center i
-- z_ik: Integer, number of resource type k at location i
+- x_il: Binary, 1 if facility at location i with level l is built
+- y_ij: Binary, 1 if demand site j is assigned to facility i
+- z_ik: Integer, number of resource type k at facility i
 
 Parameters:
-- F_il: Fixed cost of building command center at location i with level l
-- C_ik: Variable cost of resource type k at location i
-- t_ijl: Response time from location i with level l to site j
+- F_il: Fixed cost of building facility at location i with level l
+- C_ik: Variable cost of resource type k at facility i
+- t_ijl: Response time from facility i with level l to site j
 - S_j: SLA (maximum response time) for demand site j
 - MAXCAP_lk, MINCAP_lk: Capacity constraints
 """
@@ -29,10 +29,9 @@ from gurobipy import GRB
 
 load_dotenv()
 
-
 def solve_exact(data):
     """
-    Solve the optimization model using Gurobi.
+    Solve the HRCD-FLP model using Gurobi MILP optimizer.
     
     Args:
         data: Dictionary containing all problem parameters
@@ -83,11 +82,11 @@ def solve_exact(data):
     S = data['S_j']
     
     # --- Decision Variables ---
-    # x_il: 1 if command center at location i with level l is built
+    # x_il: 1 if facility at location i with level l is built
     x = model.addVars(I, L, vtype=GRB.BINARY, name="x")
-    # y_ij: 1 if demand site j is assigned to center i
+    # y_ij: 1 if demand site j is assigned to facility i
     y = model.addVars(I, J, vtype=GRB.BINARY, name="y")
-    # z_ik: Number of resources at location i
+    # z_ik: Number of resources at facility i
     z_robot = model.addVars(I, vtype=GRB.INTEGER, name="z_robot")
     z_human = model.addVars(I, vtype=GRB.INTEGER, name="z_human")
 
@@ -113,7 +112,7 @@ def solve_exact(data):
         name="OneLevel"
     )
     
-    # 2. Demand Assignment: Each site j must be assigned to at least one center i
+    # 2. Demand Assignment: Each site j must be assigned to at least one facility i
     model.addConstrs(
         (gp.quicksum(y[i, j] for i in I) >= 1 for j in J), 
         name="DemandAssign"
@@ -183,8 +182,8 @@ def solve_exact(data):
     )
 
     # Set parameters
-    model.setParam(GRB.Param.MIPGap, 0.01)
-    model.setParam(GRB.Param.TimeLimit, 60)
+    model.setParam(GRB.Param.MIPGap, 0.01) # 1% gap
+    model.setParam(GRB.Param.TimeLimit, 60*60) # 1 hour
 
     # Solve the model
     model.optimize()

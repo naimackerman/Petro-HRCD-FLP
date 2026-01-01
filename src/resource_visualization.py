@@ -3,7 +3,7 @@ Resource Allocation Visualization Module.
 
 Creates visualizations comparing resource allocation (human vs robot) across scenarios:
 - Detailed breakdown of opened facilities with resource counts (split by method)
-- Command center level distribution comparison
+- Facility level distribution comparison
 """
 import json
 import matplotlib.pyplot as plt

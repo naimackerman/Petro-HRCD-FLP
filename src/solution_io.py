@@ -410,12 +410,12 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python -m src.solution_io --list                        List all saved solutions
-  python -m src.solution_io --load balanced_exact.json    Visualize a solution
-  python -m src.solution_io --load balanced_exact.json --format png
-  python -m src.solution_io --combined Balanced           Combined exact+heuristic view
-  python -m src.solution_io --combined-all                Combined view for all scenarios
-  python -m src.solution_io --delete old_solution.json
+  uv run python -m src.solution_io --list                        List all saved solutions
+  uv run python -m src.solution_io --load balanced_exact.json    Visualize a solution
+  uv run python -m src.solution_io --load balanced_exact.json --format png
+  uv run python -m src.solution_io --combined Balanced           Combined exact+heuristic view
+  uv run python -m src.solution_io --combined-all                Combined view for all scenarios
+  uv run python -m src.solution_io --delete old_solution.json
         """
     )
     

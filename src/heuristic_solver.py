@@ -6,14 +6,14 @@ Implements a two-stage approach:
 2. Local Search Improvement (Shift, Swap, Drop/Open moves)
 
 Sets:
-- I: Candidate command center locations
+- I: Candidate facility locations
 - J: Demand sites
-- L: Command center levels (High, Medium, Low)
+- L: Facility levels (High, Medium, Low)
 - K: Resource types (Robot, Human)
 
 Decision Variables:
-- x_il: 1 if command center at location i with level l is built
-- y_ij: 1 if demand site j is assigned to command center i
+- x_il: 1 if facility at location i with level l is built
+- y_ij: 1 if demand site j is assigned to facility i
 """
 import numpy as np
 import math
