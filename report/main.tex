@@ -31,6 +31,8 @@
 \usepackage{tikz}
 \usetikzlibrary{positioning, arrows.meta}
 \usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 % \usepackage{natbib}
 % \usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
 % Useful packages
@@ -207,10 +209,10 @@
   % \multicolumn{3}{@{}c@{}}{\rule{0pt}{0.9\baselineskip}} \\[-0.2\baselineskip]
   % \authorcard{Author Four}{Organization}{Street Address}{City, Province, Postal}{author.four@email.com} &
   % \authorcard{Author Five}{Organization}{Street Address}{City, Province, Postal}{author.five@email.com} &
-  % \authorcard{Yan Akhra Pratama}{Institute Technology of Sepuluh Nopember}{Surabaya, Indonesia}{}{pratamaakhra@gmail.com} &
+  % \authorcard{Yan Akhra Pratama}{Institute Technology of Sepuluh Nopember}{Surabaya, Indonesia}{}{} &
  \authorcard{Mansur M. Arief}{King Fahd University of Petroleum and Minerals}{Dhahran, Saudi Arabia}{}{} \\
 \end{tabular*}
-% \addvspace{.75in}
+\addvspace{.5in}
 
 % ---- Two columns begin immediately after authors ----
 \begin{multicols*}{2}
@@ -225,23 +227,24 @@ Copyright~\textcopyright~ \the\year{} by the author(s). Permission granted to IN
 % =========================
 \phantomsection
 \miniheading{Abstract}
-Securing petroleum infrastructure requires balancing autonomous system efficiency with human judgment for threat escalation, which is a challenge unaddressed by classical facility location models that assume homogeneous resources and uniform service standards. This paper formulates the Human-Robot Co-Dispatch Facility Location Problem (HRCD-FLP), a capacitated facility location variant that explicitly incorporates: tiered infrastructure criticality with differentiated service level agreements, human-robot co-dispatch with supervision ratio constraints, and minimum utilization requirements for command centers. We develop a hybrid solution approach in a case study across three technology maturity scenarios, which demonstrates that transitioning from conservative (1:3 human-robot supervision) to future autonomous operations (1:10 supervision) yields significant cost reduction while maintaining complete coverage for critical infrastructure surveillance and security services.
+Securing petroleum infrastructure requires balancing autonomous system efficiency with human judgment for threat escalation—a challenge unaddressed by classical facility location models assuming homogeneous resources. This paper formulates the Human-Robot Co-Dispatch Facility Location Problem (HRCD-FLP), a capacitated facility location variant incorporating tiered infrastructure criticality, human-robot supervision ratio constraints, and minimum utilization requirements. We evaluate command center selection across three technology maturity scenarios. Results show transitioning from conservative (1:3 human-robot supervision) to future autonomous operations (1:10) yields significant cost reduction while maintaining complete critical infrastructure coverage. For small problems, exact methods dominate in both cost and computation time; for larger problems, the proposed heuristic achieves solutions within 10\% optimality gap in under 10 seconds. From systems perspective, our work demonstrate that optimized planning for human-robot teaming is key to achieve both cost-effective and mission-reliable deployments. The code is available at \url{https://github.com/naimackerman/Petro-HRCD-FLP}.
+
 \phantomsection
 \subsubsection{Keywords}
-Human-robot teaming, facility location problem, critical infrastructure protection
+Human-robot teaming, facility location problem, critical infrastructure protection, surveillance and security systems
 
 % =========================
 % ===== Main Content ======
 % =========================
 \section{Introduction}
 
-The global petroleum infrastructure represents one of the most extensive critical infrastructure networks, with over 2.7 million miles of pipelines in the United States alone and similar networks spanning the Arabian Peninsula and other major hydrocarbon basins (\cite{coburn2020oil, klass2014transporting}). These networks exhibit a hierarchical topology: high-criticality nodes (refineries, processing facilities, storage terminals) interconnected by extensive linear assets of varying criticality. Protection of such infrastructure has emerged as a paramount concern for national security and economic stability (\cite{pashchenko2024main, bajpai2007securing}), particularly as threat vectors now encompass both physical intrusion and cyber-physical attacks (\cite{mohammed2022cybersecurity}).
+The global petroleum infrastructure represents one of the most extensive critical infrastructure networks, with over 2.7 million miles of pipelines in the United States alone and similar networks spanning the Arabian Peninsula and other major hydrocarbon basins (\cite{coburn2020oil, klass2014transporting}). These networks exhibit a hierarchical topology: high-criticality nodes (refineries, processing facilities, storage terminals) interconnected by extensive linear assets of varying criticality. Protection of such infrastructure has emerged as a paramount concern for national security and economic stability (\cite{pashchenko2024main, bajpai2007securing}), particularly as threat vectors now encompass cyber-physical attacks (\cite{mohammed2022cybersecurity}).
 
-The advent of Fourth Industrial Revolution (4IR) technologies has catalyzed a paradigm shift in industrial security operations. Unmanned aerial vehicles (UAVs), autonomous ground vehicles (AGVs), and integrated sensor networks now complement human surveillance capacity. However, integrating these heterogeneous assets presents a complex systems engineering challenge---not merely technological, but fundamentally one of resource allocation, facility location, and human-machine teaming under operational constraints. The DARPA Subterranean Challenge demonstrated how multi-robot systems deployed without capability-aware coordination can lead to mission failures (\cite{agha2021nebula}).
+The advent of the fourth industrial revolution technologies has catalyzed a paradigm shift in industrial security operations. Unmanned aerial vehicles, autonomous ground vehicles, and integrated sensor networks (collectively called \textit{robots} in this work) now complement human surveillance capacity. However, integrating these heterogeneous assets presents a complex systems engineering challenge---not merely technological, but fundamentally interdisciplinary among resource allocation, facility location, and human-machine teaming under operational constraints, and more. The DARPA Subterranean Challenge demonstrated how multi-robot systems deployed without proper human-in-the-loop supervision and capability-aware coordination can lead to mission failures (\cite{agha2021nebula}).
 
-Traditionally, the facility location problem (FLP) and services coverage are modeled as covering problems in operations research, in which classical models minimize facility costs while covering demand points, or maximize demands served given available servers (\cite{li2011covering}). Yet existing FLP models remain inadequate for modern petroleum security: they treat resources as homogeneous units, ignoring the distinction between autonomous systems capable of continuous patrol and human operators essential for ethical escalation decisions (\cite{adams2024security}). Conventional covering models impose uniform service standards despite stark asymmetries (i.e. protecting a Tier-1 refinery where breach enables catastrophic sabotage differs fundamentally from monitoring remote pipeline segments) (\cite{cisa2024plan}). With ransomware attacks on oil and gas surging 935\% between 2024--2025 (\cite{zscaler2025ransomware}), the absence of human-in-the-loop constraints creates a dangerous blind spot as organizations deploy increasingly autonomous fleets (\cite{adams2024hrt, degruyter2025hitl}).
+Traditionally, the facility location problem (FLP) and services coverage are modeled as covering problems in operations research, in which classical models minimize facility costs while covering demand points, or maximize demands served given available servers (\cite{li2011covering}). Yet existing FLP models remain inadequate for modern petroleum security: they treat resources as homogeneous units, ignoring the distinction between autonomous systems capable of continuous patrol and human operators essential for ethical escalation decisions (\cite{adams2024security}). Conventional covering models also impose uniform service standards despite stark asymmetries (i.e. protecting a Tier-1 refinery where breach enables catastrophic sabotage differs fundamentally from monitoring remote pipeline segments) (\cite{cisa2024plan}). With ransomware attacks on oil and gas surging 935\% between 2024--2025 (\cite{zscaler2025ransomware}), the absence of human-in-the-loop constraints creates a dangerous blind spot as organizations deploy increasingly autonomous fleets (\cite{adams2024hrt, degruyter2025hitl}).
 
-We address these gaps by proposing conceptual model bridging the hierarchical criticality structure of petroleum infrastructure with human-in-the-loop supervision constraints that reflect both regulatory requirements for autonomous system deployment and their maturity in security-critical applications (\cite{degruyter2025hitl, cisa2024plan}). To that end, we consider: (i) tiered infrastructure criticality with differentiated service level agreements (\cite{church2004identifying}); (ii) human-robot co-dispatch with supervision ratio constraints (\cite{hagenow2023coordinated}); (iii) redundant coverage calibrated to asset vulnerability (\cite{hogan1986backup}); and (iv) command center capacity constraints (\cite{daskin2013network}). We then build a mathematical model formulation \textit{Human-Robot Co-Dispatch Facility Location Problem} (HRCD-FLP) to bridge classical facility location with human-robot teaming for critical infrastructure protection. We then demonstrate applicability through a Dhahran district case study, benchmarking against baseline models across technology maturity scenarios.
+We address these gaps by proposing a conceptual model bridging the hierarchical criticality structure of petroleum infrastructure with human-in-the-loop supervision constraints that reflect both regulatory requirements for autonomous system deployment and their maturity in security-critical applications (\cite{degruyter2025hitl, cisa2024plan}). To that end, we consider: (i) tiered infrastructure criticality with differentiated service level agreements (\cite{church2004identifying}); (ii) human-robot co-dispatch with supervision ratio constraints (\cite{hagenow2023coordinated}); (iii) redundant coverage calibrated to asset vulnerability (\cite{hogan1986backup}); and (iv) command center capacity constraints (\cite{daskin2013network}). We then build a mathematical model formulation \textit{Human-Robot Co-Dispatch Facility Location Problem} (HRCD-FLP) to bridge classical facility location with human-robot teaming for critical infrastructure protection. We demonstrate applicability through a Dhahran district case study across different technology maturity scenarios. Our overall goal is to study how to integrate rigorous FLPs that has transformed service sectors in the past into security-critical applications considering human-robot teaming trend in practice.
 
 \section{Literature Review}
 
@@ -253,7 +256,7 @@ Petroleum infrastructure protection has received sustained attention since 2001.
 
 \subsection{Facility Location Problems}
 
-The FLP originates from Weber's industrial location theory and Hakimi's switching center placement \cite{hakimi1964optimum}. The Set Covering Location Problem (SCLP) seeks minimum facilities ensuring demand coverage within service thresholds \cite{toregas1971location}, while the Maximal Covering Location Problem (MCLP) maximizes covered demand given fixed facilities \cite{church1974maximal}. The Capacitated Facility Location Problem (CFLP) adds per-facility demand constraints \cite{daskin2013network}. Extensions include backup coverage \cite{hogan1986backup} and bilevel interdiction-fortification models \cite{scaparra2008bilevel}. Emergency medical services literature has developed tiered response systems with different vehicle types serving different priorities \cite{farahani2012covering}---conceptually parallel to human-robot teaming---but heterogeneous resource integration with supervision requirements remains unaddressed.
+The FLP originates from Weber's industrial location theory and Hakimi's switching center placement \cite{hakimi1964optimum}. Classical methods in these domains include the Set Covering Location Problem (SCLP) or Maximal Covering Location Problem (MCLP). SCLP seeks minimum facilities ensuring demand coverage within service thresholds \cite{toregas1971location}, while the MCLP maximizes covered demand given fixed facilities \cite{church1974maximal}. The Capacitated Facility Location Problem (CFLP) adds per-facility demand constraints \cite{daskin2013network}. Extensions include backup coverage \cite{hogan1986backup} and bilevel interdiction-fortification models \cite{scaparra2008bilevel}. Emergency medical services literature has developed tiered response systems with different vehicle types serving different priorities \cite{farahani2012covering}. These extensions conceptually adds parallel to human-robot teaming, but heterogeneous resource integration with supervision requirements aspects remains unaddressed.
 
 \subsection{Human-Robot Collaboration}
 
@@ -365,9 +368,7 @@ This section presents the mathematical specification of the model. We formulate 
 
 \subsection{Problem Setting}
 
-Consider a set of candidate command center locations $I = \{1, \ldots, m\}$ and a set of demand sites $J = \{1, \ldots, n\}$ requiring security surveillance. Each candidate location $i \in I$ may be developed into a command center at one of three operational levels $l \in L = \{\text{High}, \text{Medium}, \text{Low}\}$, where each level is characterized by distinct cost structures, resource capacities, and response time capabilities reflecting infrastructure quality and technological sophistication.
-
-Demand sites require security coverage measured in Surveillance Coverage Units (SCU), a composite metric capturing patrol frequency, sensor density, and response readiness appropriate to asset criticality. This demand is satisfied by deploying two resource types $k \in K = \{\text{Robot}, \text{Human}\}$ from assigned command centers. Robots provide high-efficiency continuous patrol capability, while humans contribute supervisory oversight and contextual judgment for threat escalation. The resource mix at each facility is governed by both site-specific coverage requirements and global supervision policies ensuring human-in-the-loop control.
+Consider a set of candidate command center (CC) locations $I = \{1, \ldots, m\}$ and a set of demand sites $J = \{1, \ldots, n\}$ requiring security surveillance. Each candidate location $i \in I$ may be developed into a command center. Demand sites require security coverage measured in Surveillance Coverage Units (SCU), a composite metric capturing patrol frequency, sensor density, and response readiness appropriate to asset criticality. This demand is satisfied by deploying two resource types $k \in K = \{\text{Robot}, \text{Human}\}$ from assigned CCs. Each CC is built at one of three operational levels $l \in L = \{\text{High}, \text{Medium}, \text{Low}\}$, where each level is characterized by distinct cost structures, resource capacities, and response time capabilities reflecting the CC infrastructure quality and technological sophistication. Robots provide high-efficiency continuous patrol capability, while humans contribute supervisory oversight and contextual judgment for threat escalation. The resource mix at each facility is governed by both site-specific coverage requirements and global supervision policies ensuring human-in-the-loop control.
 
 \subsection{Parameters}
 
@@ -550,7 +551,47 @@ The HRCD-FLP formulation constitutes a mixed-integer linear program (MILP) with 
 % \end{enumerate}
 
 \section{Method}
-The optimization problem posed by the HRCD-FLP is NP-hard, involving complex interdependencies between facility location, level selection, and resource allocation. To address this computational challenge, we employed a hybrid solution strategy that balances optimality with scalability. For smaller instances and model validation, we utilized an exact solution approach implemented via the Gurobi Optimizer, which guarantees global optimality through a branch-and-bound mechanism. This exact solver serves as a baseline for benchmarking performance. Recognizing the computational limits of exact methods for large-scale deployments, we further developed a specialized two-stage metaheuristic. The first stage consists of a multi-level constructive greedy algorithm that iteratively assigns demand sites to facilities by minimizing marginal costs while dynamically adjusting facility levels to meet SLA and capacity constraints. The second stage refines this initial solution through a "Best Improvement" local search, which explores the solution space using shift, swap, drop, and open moves to escape local optima and enhance solution quality.
+The optimization problem posed by the HRCD-FLP is NP-hard, involving complex interdependencies between facility location, level selection, and resource allocation. To address this computational challenge, we employed a hybrid solution strategy that balances optimality with scalability. For smaller instances and model validation, we utilized an exact solution approach implemented via the Gurobi Optimizer, which guarantees global optimality through a branch-and-bound mechanism. This exact solver serves as a baseline for benchmarking performance. Recognizing the computational limits of exact methods for large-scale deployments, we further developed a specialized two-stage metaheuristic. The first stage consists of a multi-level constructive greedy algorithm that iteratively assigns demand sites to facilities by minimizing marginal costs while dynamically adjusting facility levels to meet SLA and capacity constraints. The second stage refines this initial solution through a "Best Improvement" local search, which explores the solution space using shift, swap, drop, and open moves to escape local optima and enhance solution quality. The overall procedure is outlined in Algorithm \ref{alg:heuristic}.
+
+\begin{algorithm}[H]
+\caption{Two-Stage Heuristic for HRCD-FLP}
+\label{alg:heuristic}
+\footnotesize
+\begin{algorithmic}[1]
+\State \textbf{Input:} Sites $I$, Demand $J$, Levels $L$, Params (Costs, Demand, SLA, etc.)
+\State \textbf{Output:} Facility locations $x$, Assignments $y$, Resources $z$
+\Statex
+\State \textit{\textbf{Stage 1: Constructive Greedy}}
+\For{$j \in J$}
+    \State $min\_cost \gets \infty$, $best\_i \gets \text{null}$
+    \For{$i \in I$}
+        \If{facility $i$ can serve $j$ (SLA \& feasible level)}
+            \State $\Delta C \gets$ Marginal Cost to add $j$ to $i$ (incl. level upgrades)
+            \If{$\Delta C < min\_cost$}
+                \State $min\_cost \gets \Delta C$, $best\_i \gets i$
+            \EndIf
+        \EndIf
+    \EndFor
+    \State Assign $j \to best\_i$; Update $x_{best\_i}$ to min feasible level
+    \State Update resources $z_{best\_i}$ based on assigned demand
+\EndFor
+\Statex
+\State \textit{\textbf{Stage 2: Local Search}}
+\Repeat
+    \State $improved \gets \textbf{false}$
+    \State \textit{// Moves use random sampling for large neighborhoods}
+    \If{\textsc{ShiftMove}$()$: move $j$ to different $i$ saves cost}
+         \State Apply move; $improved \gets \textbf{true}$
+    \ElsIf{\textsc{SwapMove}$()$: swap $j_1, j_2$ between $i_1, i_2$ saves cost}
+         \State Apply move; $improved \gets \textbf{true}$
+    \ElsIf{\textsc{DropMove}$()$: close $i$, redistribute sites saves cost}
+         \State Apply move; $improved \gets \textbf{true}$
+    \ElsIf{\textsc{OpenMove}$()$: open new $i$ for nearby sites saves cost}
+         \State Apply move; $improved \gets \textbf{true}$
+    \EndIf
+\Until{no improvement for $N$ consecutive iterations}
+\end{algorithmic}
+\end{algorithm}
 
 \section{Data Collection and Generation}
 The study utilizes a hybrid dataset designed to simulate the Dhahran Core Area, combining real-world geospatial topology with parameter synthesis based on industrial security standards. The experimental environment comprises 15 candidate locations and 50 demand sites, distributed to mimic pipeline corridors and scattered high-value assets. Geodesic distances were calculated to ensure realistic response time modeling. Facility capabilities were modeled across three tiers: High-level facilities represent premium infrastructure with 1.5x base fixed costs but high capacity ($\approx 240$ robots) and rapid response assets; Medium-level facilities reflect standard infrastructure; and Low-level facilities act as satellite outposts with lower costs but limited capacity and slower response times.
@@ -683,13 +724,13 @@ The optimization framework developed in this study demonstrates that significant
 
 
 % ---------- Highlighting example ----------
-\subsubsection{Highlighting Text or Citations}
-\begin{highlight}[0.5in]
-Text of this category must be italicized, justified, and have .5-inch margins all around. This ensures that important material is highlighted facilitating meaning conveyance.
-\end{highlight}
+% \subsubsection{Highlighting Text or Citations}
+% \begin{highlight}[0.5in]
+% Text of this category must be italicized, justified, and have .5-inch margins all around. This ensures that important material is highlighted facilitating meaning conveyance.
+% \end{highlight}
 
-\subsubsection{Recommendations}
-We strongly encourage you to use this document as a template for developing your own manuscript.
+% \subsubsection{Recommendations}
+% We strongly encourage you to use this document as a template for developing your own manuscript.
 
 % ---------- References (actual reference list) ----------
 % ---- Format references as shown below. Citations and references must comply with the APA reference style. For the initial paper submission, do not include title or author information in references to previous work by the paper’s author. Include full reference information for the final paper submission.
@@ -698,7 +739,7 @@ We strongly encourage you to use this document as a template for developing your
 % ---- Note 2: If you have a reference manager, use APA 7th.
 % ---- Note 3: For the initial paper submission, do not include title or author information in references to previous work by the paper’s author. Include full reference information for the final paper submission
 
-\newpage
+% \newpage
 \nocite{*}
 \section{References}
 \printbibliography[heading=none]
